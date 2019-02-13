@@ -1,0 +1,85 @@
+page-login {
+    // animation: 1s pulse;        
+    .container{
+        background: linear-gradient(rgba(1, 17, 39, 0.562),rgba(1, 17, 39, 0.9)),
+        url('../../assets/imgs/BG.jpg')
+        ;
+        background-position: bottom;
+        // background-size:cover;
+        
+    }
+    .everything{
+        // border: 2px solid red;
+        padding-top: 40%;
+        transform: translateY(-10%);
+        // background: green;
+        height: 100%;
+        z-index: -1;
+        max-width:550;
+    }
+    img{
+        height: 150px;
+    }
+    .logo{
+        // margin-bottom: 30px;
+        text-align: center;
+
+       
+    }
+    .items{
+        // background: white;
+        width: 95%;
+        margin: 0 auto;
+        border-radius: 10px;
+        max-width:550;
+        // box-shadow: 0 2px 5px grey;
+        color: white;
+    }
+    .signUp{
+        margin-top: 80px;
+        position: absolute;
+        
+    }
+    ion-list{
+        max-width:550;
+    }
+    ion-input{
+        background: rgba(0, 0, 0, 0);
+        border-bottom: 1px solid #fab335;
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: center;
+        transition: 300ms;
+        color:#fab335;
+    }
+    ion-input:active{
+        background: rgba(0, 0, 0, 0);
+        border-bottom: 1px solid white;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    .textFields{
+        width: 90%;
+        max-width: 450px;
+        // border: 2px solid red;
+        margin: 0 auto;
+        
+    }
+    #button{
+        width: 90%;
+        max-width: 450px;
+        margin: 0 auto;
+        height: 30px;
+        color: #323787;
+        text-transform: capitalize;
+    }
+    .forgot{
+        color:#fab335;
+    }
+    p{
+        text-align: center;
+        color: white
+    }
+}
+

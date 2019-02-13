@@ -1,0 +1,59 @@
+<ion-header #head>
+  <ion-navbar color="secondary">
+    <div class="head">
+      <ion-item class="CatBar" color="secondary">
+        <ion-label>Select</ion-label>
+        <ion-select class="animation" [(ngModel)]="category"  (ionChange)="typeOfArt()">
+          <ion-option  value="All">All</ion-option>
+          <ion-option value="Photography">Photography</ion-option>
+          <ion-option value="Sculpting">Sculpting</ion-option>
+          <ion-option value="Painting">Painting</ion-option>
+          <ion-option value="Fashion">Fashion/Clothing</ion-option>
+          <ion-option value="Drawing">Drawing</ion-option>
+          <ion-option value="General">General</ion-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <ion-buttons end>
+      <button outline round class="person" ion-button color="primary" icon-only (click)="GoToProfilePage()">
+        <ion-icon name="person"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content class="card-background-page" on-scroll="getScrollPosition()">
+  <ion-fab bottom right>
+    <button ion-fab mini (click)="chats()">
+      <img src="../../assets/imgs/sales-icon.png" class="buyersIcon" alt="">
+    </button>
+  </ion-fab>
+  <div class="scrollContent" *ngIf="categoryArr.length == 0 || categoryArr.length == undefined">
+    <div class="no-data">
+      <p class="emptycontent">There are no uploads yet...</p>
+      <p class="emoji">
+        <ion-icon md="md-sad" ios="ios-sad-outline"></ion-icon>
+      </p>
+      <img src="../../assets/empty.png">
+      <!-- <button ion-button (click)="reload()">Reload</button> -->
+    </div>
+  </div>
+  <ion-grid no-padding>
+    <ion-row no-padding>
+      <ion-col class="col" class="animation" col-6 *ngFor="let a of categoryArr" (click)="pushArtistDetails(a.downloadurl,a.username,a.key,a.url,a.comments,a.email,a.name,a.description,a.location,a.price,a.likes,a.name1,a.uid)">
+        <img class="theImg" [src]="a.downloadurl">
+        <br>
+        <div class="detail">
+          <ion-item class="details" no-padding no-lines>
+            <ion-avatar item-start>
+              <img class="dp" src="{{a.url}}" alt="DP">
+            </ion-avatar>
+            <p class="Caps-Lock">{{a.name}}</p>
+            <p class="Caps-Lock" id="User"> by {{a.username}}</p>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+    <hr>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,45 @@
+page-edit-profile {
+    .preview{
+        width: 200px;
+        height: 200px;
+        border-radius: 200px;
+        margin: 0 auto;
+    }
+    img{
+        width: 200px;
+        height: 200px;
+        border-radius: 200px;
+        object-fit: cover;
+    }
+    .inp{
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        padding-top: 5px;
+        background: orange;
+        margin-left: 134px;
+        margin-top: 164px;
+        text-align: center;
+        color: white;
+        border-radius: 200px;
+        box-shadow: 0 0 10px grey;
+    }
+    #file{
+        display: none;
+    }
+    #cam{
+        font-size: 20px;   
+    }
+    .item{
+        background: rgb(1,17,39);
+        color: white;
+    }
+    #areaText{
+        background: rgb(1,17,39);
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        color: white;
+    }
+}

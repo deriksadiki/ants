@@ -1,0 +1,78 @@
+  <ion-header>
+      <ion-navbar color="secondary">
+        <ion-title>{{this.obj.username}} </ion-title>
+      </ion-navbar>
+    </ion-header>
+    <ion-content class="body">
+      <div class="image">
+        <div class="theImage">
+          <img class="watermark" src="../../assets/imgs/Watermark/WaterMark.png" alt="">
+          <img class="ordered" (click)="scan($event)" alt="orderedImage" src="{{downloadurl}}">
+        </div>
+        
+        <!-- <ion-card class="buyer">
+          <ion-item class="myName">
+            <ion-avatar item-start>
+              <img src="{{tempdownloadurl}}">
+              <p>{{name1}}</p>
+            </ion-avatar>
+            <h2 class="client">{{name1}}</h2>
+          </ion-item>
+        </ion-card> -->
+        <ion-item no-lines>
+          <ion-avatar item-start>
+            <img src="{{tempdownloadurl}}" alt="">
+          </ion-avatar>
+          <h2>{{name1}}</h2>
+        </ion-item>
+      </div>
+      <div padding>
+        <ion-list>
+
+          <div *ngFor="let a of arrMsg" class="wrapper">
+            <div class="cont">
+              <div *ngIf="a.uid === currentUserId" class="flexer">
+                <div class="conter">
+                 
+                  <div>
+                    <div class="msgSent">
+    
+                      
+                      <p class="toFlip">{{a.message}}</p>
+                      <br>
+                      <p class="refSent">{{a.time}}</p>
+                    </div>
+                    <br>
+                  </div>
+                </div>    
+              </div>
+              <div *ngIf="a.uid !== currentUserId" class="flexer">
+                <div>
+                  <div class="msgReceived">
+                    <!-- <p>{{a.uid}}</p> -->
+                    <p class="sender">{{a.message}}</p>
+                    <br>
+                    <p class="ref">{{a.time}}</p>
+                  </div>
+                  <br>
+                </div>  
+              </div>
+            </div>
+          </div>
+        </ion-list>
+      </div>
+    </ion-content>
+    <ion-footer no-padding class="footer">
+      <ion-toolbar>
+        <ion-row>
+          <ion-col col-10>
+            <ion-textarea rows="1" type="text" [(ngModel)]="message" placeholder="Message here..." id="commentTXT"></ion-textarea>
+          </ion-col>
+          <ion-col col-2 class="centerIt">
+            <button ion-button class="sendBtn" mini item-end icon-only (click)="sendMesssage()">
+              <ion-icon name="send"></ion-icon>
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-toolbar>
+    </ion-footer>

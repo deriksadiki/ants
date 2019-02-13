@@ -1,0 +1,79 @@
+
+<ion-header>
+
+  <ion-toolbar color="secondary">
+    <ion-title id="tit" align="center">Upload Artwork</ion-title>
+    <ion-buttons left>
+      <button ion-button color="light" class="closeBtn" clear icon-only large (click)="dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content (click)="decide(res)">
+  <div class="container">
+  </div>
+  <div class="body" padding>
+    <div class="image">
+      <button class="btn" ion-button (click)="showAction($event)">
+        <ion-icon name="camera"></ion-icon>
+      </button>
+      <img class="preview" [src]="url" alt="" imageViewer>
+    </div>
+    <br>
+    <ion-list no-lines>
+      <div class="cat">
+        <ion-item class="theItem">
+          <ion-label>Category</ion-label>
+          <ion-select [(ngModel)]="category">
+            <ion-option value="Photography">Photography</ion-option>
+            <ion-option value="Sculpting">Sculpting</ion-option>
+            <ion-option value="Painting">Painting</ion-option>
+            <ion-option value="Fashion">Fashion/Clothing</ion-option>
+            <ion-option value="Drawing">Drawing</ion-option>
+            <ion-option value="General">General</ion-option>
+          </ion-select>
+        </ion-item>
+        <br>
+        <ion-input class="theItem" placeholder="Artwork Name" [(ngModel)]="name" type="text" maxlength="30"></ion-input>
+        <br>
+        <ion-input class="theItem" placeholder="Location" type="text" [(ngModel)]="location" maxlength="20" row="4"></ion-input>
+        <br>
+        <ion-input class="theItem" placeholder="Price (R)" (keypress)="omit_special_char($event)" [(ngModel)]="price" type="number"
+          max="2"></ion-input>
+        <br>
+        <ion-textarea placeholder="Art Description (max 150)" [(ngModel)]="description" class="theItem" type="text" maxlength="150"
+          row="4"></ion-textarea>
+      </div>
+    </ion-list>
+    <button class="uploadBtn" ion-button full color="primary" (click)="uploadPicture()">Upload Artwork</button>
+  </div>
+</ion-content>
+<ion-footer>
+  <div class="options" padding>
+    <div class="textspec" padding>
+      Upload
+      <br>
+      <br>
+    </div>
+    <div>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4>
+            <button icon-only class="BTNs" ion-button (click)="takepic()">
+              <ion-icon name="camera"></ion-icon>
+            </button>
+          </ion-col>
+          <ion-col col-4>
+            <button icon-only class="BTNs" ion-button>
+              <label for="insert">
+                <ion-icon name="images"></ion-icon>
+              </label>
+              <input type="file" id="insert" accept="image/*" (change)="insertImagine($event)">
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-footer>

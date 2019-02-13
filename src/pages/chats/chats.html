@@ -1,0 +1,37 @@
+<ion-header>
+
+  <ion-navbar color="secondary">
+    <ion-title>My Orders</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding class="body" (ionScroll)="scroll($event)">
+  <!-- if there are no messages yet -->
+  <div class="no-data" *ngIf="displayCurentMessages.length == 0 || displayCurentMessages.length == undefined">
+    <p class="emptycontent">It looks like there are no messages yet...</p>
+    <img src="../../assets/empty.png">
+  </div>
+  <div class="not-empty">
+    <div class="patcher" *ngFor="let a of displayCurentMessages">
+
+      <ion-item class="client" (click)="showDetails(a.downloadurl, a.tempName, a.tempdownloadurl, a.price, a.name1, a.email,a.message,a.key,a.user,a.ID,a.path, a.pic)"
+        id="chats">
+        <ion-avatar item-start>
+          <img src="{{a.tempdownloadurl}}">
+        </ion-avatar>
+        <div class="cover">
+
+        </div>
+        <h2 class="caps">{{a.tempName}}</h2>
+        <i class="italics">{{a.message}}</i>
+        <i class="italics1">{{a.time}}</i>
+
+      </ion-item>
+      <br>
+    </div>
+
+
+  </div>
+</ion-content>

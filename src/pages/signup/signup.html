@@ -1,0 +1,25 @@
+<ion-content class="container">
+  <div>
+    <button ion-button class="backBTN" icon-only (click)="dismiss()" clear>
+      <ion-icon name="arrow-back"></ion-icon>
+    </button>
+  </div>
+  <div class="everything">
+    <div class="logo">
+      <img src="../../assets/imgs/theLogo/ANTZ Logo.png" alt="">
+    </div>
+    <div class="items">
+      <ion-list no-lines>
+        <div class="textFields">
+          <ion-input type="text" placeholder="Username" [(ngModel)]="name"></ion-input>
+          <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
+          <ion-input type="password" placeholder="Password (min 6 char)" [(ngModel)]="password"></ion-input>
+        </div>
+      </ion-list>
+      <button id="button" ion-button block (click)="signUp()">
+        Sign Up
+      </button>
+    </div>
+    <br>
+  </div>
+</ion-content>

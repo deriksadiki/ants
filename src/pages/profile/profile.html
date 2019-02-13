@@ -1,0 +1,75 @@
+<ion-header transparent>
+    <ion-toolbar color="secondary">
+      <button ion-button clear color="light" icon-only (click)="GoBackToCategory()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+      <ion-buttons end>
+        <button ion-button class="threeDots" (click)="presentPopover($event)">
+          <ion-icon name="more"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title></ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content #popoverContent class="home">
+    <ion-fab bottom right>
+      <button ion-fab mini icon-only color="primary" class="btnIcon" (click)="upload()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+    <div class="head" id="start" #head>
+      <div id="pic" align="center">
+        <div class="photo">
+          <div class="dp">
+            <ion-grid *ngFor="let item of arr">
+              <ion-row>
+                <ion-col col-5 class="displayPhoto">
+                  <div>
+                    <img class="m" [src]="item.downloadurl" imageViewer>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="personal-details">
+                    <p class="Caps-Lock">
+                      <b class="artist-name">{{item.name}}</b>
+                    </p>
+                    <p class="lowerCase">{{item.email}}</p>
+                    <p>{{item.contact}}</p>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="bio">
+                    {{item.bio}}
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
+        </div>
+      </div>
+      <div class="list">
+      </div>
+    </div>
+    <div class="split">
+      <b class="uploads" id="theHead">My Artwork</b>
+    </div>
+    <div class="contents" *ngIf="list.length == 0 || list.length == undefined">
+      <div class="no-data">
+        <img class="empty1" src="../../assets/empty.png">
+        <p class="emptycontent">There are no uploads yet... click <b> <ion-icon name="add"></ion-icon> </b> to get started.</p>
+      </div>
+    </div>
+    <ion-grid class="uploads">
+      <ion-row class="gal">
+        <ion-col *ngFor="let a of list" col-6>
+          <div class="remover" (click)="removeImage(a.key)">
+            <ion-icon ios="ios-trash" md="md-trash"></ion-icon>
+          </div>
+          <img class="image" [src]="a.downloadurl" imageViewer alt="">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>

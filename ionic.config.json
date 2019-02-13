@@ -1,0 +1,7 @@
+{
+  "name": "StreetArtzApplication",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
