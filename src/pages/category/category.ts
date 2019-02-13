@@ -130,33 +130,33 @@ export class CategoryPage {
 
   }
   chats() {
-    // this.verified = this.art.verify();
-    // if (this.verified == 0) {
-    //   let alert = this.alertCtrl.create({
-    //     title: 'Email Verification',
-    //     message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
-    //     buttons: [
-    //       {
-    //         text: 'Cancel',
-    //         role: 'cancel',
-    //         handler: () => {
-    //           console.log('Cancel');
-    //         }
-    //       },
-    //       {
-    //         text: 'Send',
-    //         handler: () => {
-    //           this.art.checkVerificatiom();
-    //         }
-    //       }
-    //     ]
-    //   });
-    //   alert.present();
+    this.verified = this.art.verify();
+    if (this.verified == 0) {
+      let alert = this.alertCtrl.create({
+        title: 'Email Verification',
+        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel');
+            }
+          },
+          {
+            text: 'Send',
+            handler: () => {
+              this.art.checkVerificatiom();
+            }
+          }
+        ]
+      });
+      alert.present();
 
-    // }
-    // else {
-    this.navCtrl.push(ChatsPage)
-    // }
+    }
+    else {
+      this.navCtrl.push(ChatsPage)
+    }
   }
 
 }

@@ -1270,8 +1270,6 @@ export class StreetartzProvider {
       });
     });
   }
-
-
   conversation = new Array();
   messgaes = new Array();
 
