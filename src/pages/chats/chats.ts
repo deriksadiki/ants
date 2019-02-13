@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import firebase from 'firebase';
+import firebase, { database } from 'firebase';
 import { LoadingController } from "ionic-angular";
 import { OrderModalPage } from '../order-modal/order-modal';
 import { ViewInforPage } from '../view-infor/view-infor';
@@ -62,13 +62,13 @@ export class ChatsPage {
       duration: 4000000
     });
     loading.present();
-    this.art.getSentMessages().then(() => { })
-    this.art.getDirectMessgs();
-    this.art.getAllConvo().then((data: any) => {
-      this.displayCurentMessages = data;
-      setTimeout(() => {
-        loading.dismiss();
-      }, 150);
+    this.art.getSentMessages().then(database => {
+      this.art.getDirectMessgs().then(() => {
+        this.art.getAllConvo().then((data: any) => {
+          this.displayCurentMessages = data;
+          loading.dismiss();
+        })
+      })
     })
   }
 

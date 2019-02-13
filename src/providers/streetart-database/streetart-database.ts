@@ -1249,21 +1249,23 @@ export class StreetartzProvider {
           .database()
           .ref(path)
           .on("value", data => {
-            this.allMessages.length = 0;
-            var messages = data.val();
-            var keys = Object.keys(messages);
-            for (var x = 0; x < keys.length; x++) {
-              var k = keys[x];
-              let obj = {
-                message: messages[k].message,
-                time: messages[k].time,
-                uid: messages[k].uid,
-                status: messages[k].status,
-                artKey: messages[k].artKey
-              };
-              this.allMessages.push(obj);
+            if (data.val() != undefined || data.val() != null) {
+              this.allMessages.length = 0;
+              var messages = data.val();
+              var keys = Object.keys(messages);
+              for (var x = 0; x < keys.length; x++) {
+                var k = keys[x];
+                let obj = {
+                  message: messages[k].message,
+                  time: messages[k].time,
+                  uid: messages[k].uid,
+                  status: messages[k].status,
+                  artKey: messages[k].artKey
+                };
+                this.allMessages.push(obj);
+              }
+              accpt(this.allMessages);
             }
-            accpt(this.allMessages);
           });
       });
     });
@@ -1276,7 +1278,7 @@ export class StreetartzProvider {
   getSentMessages() {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
-      firebase.database().ref('messages/' + currentUser).on('value', data => {
+      firebase.database().ref('messages2/' + currentUser).on('value', data => {
         if (data.val() != undefined || data.val() != undefined) {
           this.conversation.length = 0;
           this.allMessages.length = 0;
@@ -1348,25 +1350,32 @@ export class StreetartzProvider {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
       firebase.database().ref('Orders/' + currentUser).on('value', data => {
-        console.log('direct');
-        this.tempMsgArray.length = 0;
-        var orders = data.val();
-        var keys = Object.keys(orders)
-        var artKey;
-        var lastMesag;
-        var time;
-        var path;
-        for (var x = 0; x < keys.length; x++) {
-          var k = keys[x]
-          path = 'messages2/' + orders[k].currentUserId + '/' + currentUser + '/' + orders[k].artKey;
-          let Obj = {
-            path: path,
-            id: orders[k].currentUserId,
-            url: orders[k].downloadurl,
+        if (data.val() != undefined || data.val() != null) {
+          console.log('direct');
+          this.tempMsgArray.length = 0;
+          var orders = data.val();
+          var keys = Object.keys(orders)
+          var artKey;
+          var lastMesag;
+          var time;
+          var path;
+          for (var x = 0; x < keys.length; x++) {
+            var k = keys[x]
+            path = 'messages2/' + orders[k].currentUserId + '/' + currentUser + '/' + orders[k].artKey;
+            let Obj = {
+              path: path,
+              id: orders[k].currentUserId,
+              url: orders[k].downloadurl,
+            }
+            this.tempMsgArray.push(Obj)
           }
-          this.tempMsgArray.push(Obj)
+          this.step2(this.tempMsgArray).then(() => {
+            pass('')
+          })
         }
-        this.step2(this.tempMsgArray)
+        else {
+          pass('')
+        }
       })
     })
   }
@@ -1390,7 +1399,9 @@ export class StreetartzProvider {
         })
       }
       setTimeout(() => {
-        this.step3(data, this.step2Arr)
+        this.step3(data, this.step2Arr).then(() => {
+          pass('')
+        })
       }, 1000);
     })
   }
@@ -1399,7 +1410,7 @@ export class StreetartzProvider {
   step3(users, messgages) {
     return new Promise((pass, fail) => {
       for (var x = 0; x < messgages.length; x++) {
-        firebase.database().ref('profiles/' + messgages[x].id).on('value', data2 => {
+        firebase.database().ref('profiles/' + users[x].id).on('value', data2 => {
           let obj = {
             url: data2.val().downloadurl,
             name: data2.val().name
@@ -1407,7 +1418,11 @@ export class StreetartzProvider {
           this.step3Arr.push(obj)
         })
       }
-      this.combine(users, messgages, this.step3Arr)
+      console.log();
+
+      this.combine(users, messgages, this.step3Arr).then(() => {
+        pass('')
+      })
     })
   }
 
@@ -1415,7 +1430,7 @@ export class StreetartzProvider {
     return new Promise((accpt, rej) => {
       setTimeout(() => {
         for (var x = 0; x < users.length; x++) {
-          this.setConversation(pro[x].url, mes[x].lastMesag, mes[x].time, pro[x].name, users[x].path, mes[x].id, users[x].url, mes[x].artKey)
+          this.setConversation(pro[x].url, mes[x].lastMesag, mes[x].time, pro[x].name, users[x].path, users[x].id, users[x].url, mes[x].artKey)
         }
         accpt('')
       }, 700);
