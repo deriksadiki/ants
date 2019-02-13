@@ -1249,8 +1249,8 @@ export class StreetartzProvider {
           .database()
           .ref(path)
           .on("value", data => {
+            this.allMessages.length = 0;
             if (data.val() != undefined || data.val() != null) {
-              this.allMessages.length = 0;
               var messages = data.val();
               var keys = Object.keys(messages);
               for (var x = 0; x < keys.length; x++) {
@@ -1278,10 +1278,10 @@ export class StreetartzProvider {
   getSentMessages() {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
+      this.conversation.length = 0;
+      this.allMessages.length = 0;
       firebase.database().ref('messages2/' + currentUser).on('value', data => {
         if (data.val() != undefined || data.val() != undefined) {
-          this.conversation.length = 0;
-          this.allMessages.length = 0;
           var destinationIDs = data.val();
           var destKeys = Object.keys(destinationIDs);
           for (var x = 0; x < destKeys.length; x++) {
@@ -1291,33 +1291,37 @@ export class StreetartzProvider {
                 var artKeyzz = Object.keys(artskeyz);
                 for (var i = 0; i < artKeyzz.length; i++) {
                   firebase.database().ref('messages2/' + currentUser + '/' + destKeys[x] + '/' + artKeyzz[i]).on('value', messages => {
-                    var messg = messages.val();
-                    var msgKeys = Object.keys(messg);
-                    var artKey;
-                    var lastMesag;
-                    var time;
-                    var destKey = destKeys[x]
-                    var path = 'messages/' + currentUser + '/' + destKeys[x] + '/' + artKeyzz[i];
-                    for (var y = 0; y < msgKeys.length; y++) {
-                      artKey = messg[msgKeys[y]].artKey;
-                      lastMesag = messg[msgKeys[y]].message;
-                      time = messg[msgKeys[y]].time;
-                    }
-                    firebase.database().ref('Orders/' + destKeys[x]).on('value', orders => {
-                      var allOrders = orders.val();
-                      var OrdersKey = Object.keys(allOrders);
-                      for (var z = 0; z < OrdersKey.length; z++) {
-                        var k = OrdersKey[z]
-                        var keyArt = allOrders[k].artKey;
-                        if (keyArt == artKey) {
-                          console.log(destKey);
-                          firebase.database().ref('profiles/' + destKey).on('value', profile => {
-                            console.log(profile.val());
-                            this.setConversation(profile.val().downloadurl, lastMesag, time, profile.val().name, path, destKey, allOrders[k].downloadurl, artKey)
-                          })
-                        }
+                    if (messages.val() != undefined || messages.val()) {
+                      var messg = messages.val();
+                      var msgKeys = Object.keys(messg);
+                      var artKey;
+                      var lastMesag;
+                      var time;
+                      var destKey = destKeys[x]
+                      var path = 'messages2/' + currentUser + '/' + destKeys[x] + '/' + artKeyzz[i];
+                      for (var y = 0; y < msgKeys.length; y++) {
+                        artKey = messg[msgKeys[y]].artKey;
+                        lastMesag = messg[msgKeys[y]].message;
+                        time = messg[msgKeys[y]].time;
                       }
-                    })
+                      firebase.database().ref('Orders/' + destKeys[x]).on('value', orders => {
+                        if (orders.val() != undefined || orders.val() != null) {
+                          var allOrders = orders.val();
+                          var OrdersKey = Object.keys(allOrders);
+                          for (var z = 0; z < OrdersKey.length; z++) {
+                            var k = OrdersKey[z]
+                            var keyArt = allOrders[k].artKey;
+                            if (keyArt == artKey) {
+                              console.log(destKey);
+                              firebase.database().ref('profiles/' + destKey).on('value', profile => {
+                                console.log(profile.val());
+                                this.setConversation(profile.val().downloadurl, lastMesag, time, profile.val().name, path, destKey, allOrders[k].downloadurl, artKey)
+                              })
+                            }
+                          }
+                        }
+                      })
+                    }
                   })
                   console.log('nothing found');
                   pass('')
