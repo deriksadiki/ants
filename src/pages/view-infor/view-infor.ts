@@ -21,7 +21,7 @@ export class ViewInforPage {
   price;
   name1;
   email;
-  message;
+  message = "";
   tempdownloadurl;
   list = [];
   currentUserId;
@@ -58,12 +58,15 @@ export class ViewInforPage {
   }
 
   send() {
-    this.arrMsg = [];
-    this.art.sendMessage(this.path, this.message, this.artKey).then((data) => {
-      console.log(data);
-      this.getData(this.path)
-      this.message = "";
-    })
+    if (this.message != "") {
+      this.arrMsg = [];
+      this.art.sendMessage(this.path, this.message, this.artKey).then((data) => {
+        console.log(data);
+        this.getData(this.path)
+        this.message = "";
+      })
+    }
+
   }
 
   assignArtKey(key) {

@@ -146,7 +146,7 @@ export class CategoryPage {
           {
             text: 'Send',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]

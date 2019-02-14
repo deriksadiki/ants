@@ -93,7 +93,7 @@ export class StreetartzProvider {
       user.sendEmailVerification();
       let alert = this.alertCtrl.create({
         title: '',
-        subTitle: "We have sent you an email,Open it up to activate your account.",
+        subTitle: "We have sent you a verification mail, Please activate your account with the link in the mail",
         buttons: ['OK']
       });
       alert.present();
@@ -117,6 +117,10 @@ export class StreetartzProvider {
     }
   }
 
+  sendVerificationLink() {
+    var user = firebase.auth().currentUser;
+    user.sendEmailVerification();
+  }
 
   register(email, password, name) {
     return new Promise((resolve, reject) => {
@@ -145,6 +149,7 @@ export class StreetartzProvider {
               });
             resolve();
             loading.dismiss();
+
           })
           .catch(error => {
             loading.dismiss();
@@ -944,22 +949,22 @@ export class StreetartzProvider {
           .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
         var resuls;
 
-        // firebase
-        // .database()
-        // .ref("messages/" + artkey)
-        // .child(userkey)
-        // .push({
-        //   message: message,
-        //   uid: currentUser,
-        //   time: time,
-        //   status: resuls,
-        //   artKey: picKey
-        // });
+        firebase
+          .database()
+          .ref("messages/" + artkey)
+          .child(userkey)
+          .push({
+            message: message,
+            uid: currentUser,
+            time: time,
+            status: resuls,
+            artKey: picKey
+          });
 
         resuls = false;
         firebase
           .database()
-          .ref("messages/" + userkey + '/' + artkey + '/' + picKey)
+          .ref("messages2/" + userkey + '/' + artkey + '/' + picKey)
           .push({
             message: message,
             uid: currentUser,
@@ -1276,10 +1281,9 @@ export class StreetartzProvider {
   getSentMessages() {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
-      this.conversation.length = 0;
-      this.allMessages.length = 0;
       firebase.database().ref('messages2/' + currentUser).on('value', data => {
         if (data.val() != undefined || data.val() != undefined) {
+          this.conversation.length = 0;
           var destinationIDs = data.val();
           var destKeys = Object.keys(destinationIDs);
           for (var x = 0; x < destKeys.length; x++) {
@@ -1342,7 +1346,21 @@ export class StreetartzProvider {
   checkOrderState(id, key) {
     return new Promise((accpt, rej) => {
       var currentUser = firebase.auth().currentUser.uid;
-      firebase.database().ref('Orders/' + currentUser).on('value', data => {
+      firebase.database().ref('Orders/' + id).on('value', data => {
+        var details = data.val();
+        var keys = Object.keys(details);
+        for (var x = 0; x < keys.length; x++) {
+          var k = keys[x];
+          console.log(key);
+
+          if (details[k].currentUserId == currentUser && details[k].artKey == key) {
+            console.log('found');
+            accpt(1)
+            break;
+          }
+        }
+        console.log('not found');
+        accpt(0)
       })
     })
   }
@@ -1352,6 +1370,9 @@ export class StreetartzProvider {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
       firebase.database().ref('Orders/' + currentUser).on('value', data => {
+        this.tempMsgArray.length = 0;
+        this.step2Arr.length = 0;
+        this.step3Arr.length = 0;
         if (data.val() != undefined || data.val() != null) {
           console.log('direct');
           this.tempMsgArray.length = 0;
@@ -1404,7 +1425,7 @@ export class StreetartzProvider {
         this.step3(data, this.step2Arr).then(() => {
           pass('')
         })
-      }, 1000);
+      }, 1200);
     })
   }
 
@@ -1412,16 +1433,16 @@ export class StreetartzProvider {
   step3(users, messgages) {
     return new Promise((pass, fail) => {
       for (var x = 0; x < messgages.length; x++) {
-        firebase.database().ref('profiles/' + users[x].id).on('value', data2 => {
-          let obj = {
-            url: data2.val().downloadurl,
-            name: data2.val().name
-          }
-          this.step3Arr.push(obj)
-        })
+        if (users[x] != undefined || users[x] != null) {
+          firebase.database().ref('profiles/' + users[x].id).on('value', data2 => {
+            let obj = {
+              url: data2.val().downloadurl,
+              name: data2.val().name
+            }
+            this.step3Arr.push(obj)
+          })
+        }
       }
-      console.log();
-
       this.combine(users, messgages, this.step3Arr).then(() => {
         pass('')
       })
@@ -1434,6 +1455,9 @@ export class StreetartzProvider {
         for (var x = 0; x < users.length; x++) {
           this.setConversation(pro[x].url, mes[x].lastMesag, mes[x].time, pro[x].name, users[x].path, users[x].id, users[x].url, mes[x].artKey)
         }
+        // this.tempMsgArray.length = 0;
+        this.step2Arr.length = 0;
+        // this.step3Arr.length = 0;
         accpt('')
       }, 700);
     })

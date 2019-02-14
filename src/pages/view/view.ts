@@ -211,7 +211,7 @@ export class ViewPage implements OnInit {
           {
             text: 'Send',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]
@@ -220,28 +220,55 @@ export class ViewPage implements OnInit {
 
     }
     else {
-      this.art.getUserEmail().then(data => {
-        this.SendEmailProvider.sendEmail(data, this.email, this.downloadurl, price);
-        let obj = {
-          name: name,
-          pic: pic,
-          key: this.keys2,
-          url: url,
-          comments: this.numComments,
-          email: email,
-          username: username,
-          description: description,
-          location: location,
-          price: price,
-          likes: this.numlikes,
-          name1: name1,
-          uid: uid,
-          currentUserId: currentUserId
-        }
-        this.sendInformation();
-        this.navCtrl.push(OrderModalPage, { obj: obj });
-      })
+      this.art.checkOrderState(uid, this.keys2).then((data: any) => {
+        if (data == 1) {
+          let alert = this.alertCtrl.create({
+            // title: 'Email Verification',
+            message: 'You cannot order the same artwork more than once.',
+            cssClass: "myAlert",
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel');
+                }
+              },
+              {
+                text: 'Send',
+                handler: () => {
+                  this.art.checkVerificatiom();
+                }
+              }
+            ]
+          });
+          alert.present();
 
+        }
+        else {
+          this.art.getUserEmail().then(data => {
+            this.SendEmailProvider.sendEmail(data, this.email, this.downloadurl, price);
+            let obj = {
+              name: name,
+              pic: pic,
+              key: this.keys2,
+              url: url,
+              comments: this.numComments,
+              email: email,
+              username: username,
+              description: description,
+              location: location,
+              price: price,
+              likes: this.numlikes,
+              name1: name1,
+              uid: uid,
+              currentUserId: currentUserId
+            }
+            this.sendInformation();
+            this.navCtrl.push(OrderModalPage, { obj: obj });
+          })
+        }
+      })
     }
   }
 
@@ -281,6 +308,7 @@ export class ViewPage implements OnInit {
       let alert = this.alertCtrl.create({
         title: 'Email Verification',
         message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Cancel',
@@ -292,7 +320,7 @@ export class ViewPage implements OnInit {
           {
             text: 'Send',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]
@@ -339,7 +367,7 @@ export class ViewPage implements OnInit {
           {
             text: 'Send',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]

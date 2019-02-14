@@ -67,6 +67,7 @@ export class SignupPage {
       this.art.register(this.email, this.password, this.name).then(() => {
         // this.presentLoading1();
         this.navCtrl.setRoot(CategoryPage);
+        this.art.checkVerificatiom();
       }, (error) => {
         console.log(error.message);
       })

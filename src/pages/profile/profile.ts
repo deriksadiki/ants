@@ -67,7 +67,7 @@ export class ProfilePage {
           {
             text: 'Send',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]
@@ -98,7 +98,7 @@ export class ProfilePage {
           {
             text: 'Send',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]
