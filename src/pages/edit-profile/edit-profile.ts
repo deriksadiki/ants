@@ -75,7 +75,8 @@ export class EditProfilePage implements OnInit {
       const alert = this.alertCtrl.create({
         title: "Oops!",
         subTitle: "Please make sure that your mobile number is correct.",
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: "myAlert",
       });
       alert.present();
     }

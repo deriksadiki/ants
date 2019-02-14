@@ -48,8 +48,9 @@ export class CategoryPage {
     let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
       let alert = this.alertCtrl.create({
         title: '',
-        subTitle: 'network was disconnected ',
-        buttons: ['OK']
+        subTitle: 'Please check your connection.',
+        buttons: ['OK'],
+        cssClass: "myAlert",
       });
       alert.present();
     });
@@ -58,7 +59,8 @@ export class CategoryPage {
       let alert = this.alertCtrl.create({
         title: '',
         subTitle: 'network connection has been established',
-        buttons: ['Ok']
+        buttons: ['Ok'],
+        cssClass: "myAlert",
       });
       alert.present();
     });
@@ -133,25 +135,26 @@ export class CategoryPage {
     this.verified = this.art.verify();
     if (this.verified == 0) {
       let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel');
-            }
-          },
-          {
-            text: 'Send',
-            handler: () => {
-              this.art.checkVerificatiom();
-            }
+      title: 'Email not verified',
+      message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+      cssClass: "myAlert",
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel');
           }
-        ]
-      });
-      alert.present();
+        },
+        {
+          text: 'Resend',
+          handler: () => {
+            this.art.checkVerificatiom();
+          }
+        }
+      ]
+    });
+    alert.present();
 
     }
     else {

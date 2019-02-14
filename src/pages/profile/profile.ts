@@ -54,8 +54,9 @@ export class ProfilePage {
     this.verified = this.art.verify();
     if (this.verified == 0) {
       let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        title: 'Email not verified',
+        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Cancel',
@@ -65,7 +66,7 @@ export class ProfilePage {
             }
           },
           {
-            text: 'Send',
+            text: 'Resend',
             handler: () => {
               this.art.checkVerificatiom();
             }
@@ -85,8 +86,9 @@ export class ProfilePage {
     this.verified = this.art.verify();
     if (this.verified == 0) {
       let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        title: 'Email not verified',
+        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Cancel',
@@ -96,7 +98,7 @@ export class ProfilePage {
             }
           },
           {
-            text: 'Send',
+            text: 'Resend link',
             handler: () => {
               this.art.checkVerificatiom();
             }
@@ -192,9 +194,10 @@ export class ProfilePage {
     const confirm = this.alertCtrl.create({
       title: 'Confirm',
       message: 'Are you sure you want to delete image?',
+      cssClass: "myAlert",
       buttons: [
         {
-          text: 'Ok',
+          text: 'Delete',
           handler: () => {
             this.art.RemoveUploadedPicture(key);
             this.retreivePics();

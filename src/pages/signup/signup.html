@@ -4,22 +4,27 @@
       <ion-icon name="arrow-back"></ion-icon>
     </button>
   </div>
-  <div class="everything">
+  <form class="everything" name="me">
     <div class="logo">
       <img src="../../assets/imgs/theLogo/ANTZ Logo.png" alt="">
     </div>
     <div class="items">
       <ion-list no-lines>
         <div class="textFields">
-          <ion-input type="text" placeholder="Username" [(ngModel)]="name"></ion-input>
-          <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
-          <ion-input type="password" placeholder="Password (min 6 char)" [(ngModel)]="password"></ion-input>
+          
+          <ion-input name="fName" #fName="ngModel" type="text" placeholder="Username" ngModel required></ion-input>
+          <span *ngIf="!fName.valid && fName.touched" class="help-block helptext">Please enter Username</span>
+          <ion-input name="email" #email="ngModel" type="email" placeholder="Email" ngModel required></ion-input>
+          <span *ngIf="!email.valid && email.touched" class="help-block helptext">Please enter your email</span>
+          <ion-input type="password" name="password" #password="ngModel" minlength="6" placeholder="Password (min 6 char)" required ngModel></ion-input>
+          <span *ngIf="!password.valid && password.touched" class="help-block helptext">Please enter password</span>
+          <!-- <span ng-if="!me.password.$valid">Password is too short</span>       -->
         </div>
       </ion-list>
-      <button id="button" ion-button block (click)="signUp()">
+      <button id="button" ion-button block (click)="signUp(fName.value, email.value,password.value)">
         Sign Up
       </button>
     </div>
     <br>
-  </div>
+  </form>
 </ion-content>

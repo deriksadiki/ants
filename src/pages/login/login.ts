@@ -38,38 +38,44 @@ export class LoginPage {
   signup() {
     this.navCtrl.setRoot(EulaPage);
   }
-  login() {
-    if (this.email == undefined
-      || this.password == undefined) {
+  login(email, password) {
+    console.log(email);
+   
+    if (email == undefined || email == null 
+      && password == undefined) {
       const alert = this.alertCtrl.create({
-        title: "Oh no! ",
+        title: "Fields empty",
         subTitle: "Please enter your email and password to login.",
-        buttons: ['OK']
+        buttons: ['OK'],
+        cssClass: "myAlert",
       });
       alert.present();
     }
-    else if (this.email == "") {
+    else if (email == "" || email == null) {
       const alert = this.alertCtrl.create({
-        title: "No Email",
-        subTitle: "It looks like you didn't enter your email address.",
-        buttons: ['OK']
+        // title: "No Email",
+        subTitle: "The email address field is empty, please insert your email address",
+        buttons: ['OK'],
+        cssClass: "myAlert",
       });
       alert.present();
     }
-    else if (this.password == "") {
+    else if (password == "" || password == null) {
       const alert = this.alertCtrl.create({
-        title: "No Password",
-        subTitle: "You have not entered your password. Please enter your password",
-        buttons: ['OK']
+        // title: "No password",
+        subTitle: "The password field is empty, please insert your password.",
+        buttons: ['OK'],
+        cssClass: "myAlert",
       });
       alert.present();
     }
     else {
  
-      this.art.login(this.email, this.password).then(() => {
+      this.art.login(email, password).then(() => {
         // this.presentLoading1();
         this.navCtrl.setRoot(CategoryPage);
       }, (error) => {
+        // alert("error")
         console.log(error.message);
       })
     }
@@ -81,6 +87,8 @@ export class LoginPage {
     this.navCtrl.push(ForgotPasswordPage)
   }
 
-
+  explore(){
+    this.navCtrl.setRoot(CategoryPage)
+  }
 
 }

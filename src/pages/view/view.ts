@@ -65,7 +65,6 @@ export class ViewPage implements OnInit {
   userId;
   display = [];
   tempemail;
-
   clr = "";
   obj = this.navParams.get("obj");
   constructor(public SendEmailProvider: SendEmailProvider, public navCtrl: NavController, public navParams: NavParams, public art: StreetartzProvider, private emailComposer: EmailComposer, public alertCtrl: AlertController, public toastCtrl: ToastController) {
@@ -129,7 +128,28 @@ export class ViewPage implements OnInit {
       }
     })
   }
+  enable(event){
+    // console.log(this.comment.length);
+    var enabler = document.getElementsByClassName("overlay") as HTMLCollectionOf <HTMLElement>
 
+    if(this.comment != null || this.comment != "" || this.comment != " " || this.comment != undefined || this.comment.length > 0){
+      // enabler[0].style.display="none"
+      enabler[0].style.display="none"
+
+    }
+    // else if(this.comment == null || this.comment == "" || this.comment == " " || this.comment == undefined || this.comment.length < 1){
+    //   enabler[0].style.display="block";
+    //   console.log("empty");
+      
+    // }
+    if(this.comment.length == 0){
+      enabler[0].style.display="block";
+      console.log("empty");
+      
+    }
+
+    
+  }
   scroll(event) {
     let page = document.getElementsByClassName('content') as HTMLCollectionOf<HTMLElement>;
     let backBTN = document.getElementsByClassName('theWidth') as HTMLCollectionOf<HTMLElement>;
@@ -198,8 +218,9 @@ export class ViewPage implements OnInit {
     this.verified = this.art.verify();
     if (this.verified == 0) {
       let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        title: 'Email not verified',
+        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Cancel',
@@ -209,7 +230,7 @@ export class ViewPage implements OnInit {
             }
           },
           {
-            text: 'Send',
+            text: 'Resend',
             handler: () => {
               this.art.checkVerificatiom();
             }
@@ -279,8 +300,9 @@ export class ViewPage implements OnInit {
     this.verified = this.art.verify();
     if (this.verified == 0) {
       let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        title: 'Email not verified',
+        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Cancel',
@@ -290,7 +312,7 @@ export class ViewPage implements OnInit {
             }
           },
           {
-            text: 'Send',
+            text: 'Resend',
             handler: () => {
               this.art.checkVerificatiom();
             }
@@ -325,9 +347,10 @@ export class ViewPage implements OnInit {
   CommentPic(key) {
     this.verified = this.art.verify();
     if (this.verified == 0) {
-      let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        let alert = this.alertCtrl.create({
+        title: 'Email not verified',
+        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Cancel',
@@ -337,7 +360,7 @@ export class ViewPage implements OnInit {
             }
           },
           {
-            text: 'Send',
+            text: 'Resend',
             handler: () => {
               this.art.checkVerificatiom();
             }
@@ -349,8 +372,8 @@ export class ViewPage implements OnInit {
     else {
       if (this.comment == "" || this.comment == null) {
         const alert = this.alertCtrl.create({
-          title: "Oops!",
-          subTitle: "It looks like you didn't write anything on the comments, please check.",
+          // title: "Oops!",
+          subTitle: "It looks like you didn't write anything on the comments, please check verify your input.",
           buttons: ['OK']
         });
         alert.present();

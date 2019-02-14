@@ -27,11 +27,19 @@ export class ForgotPasswordPage {
     console.log('ionViewDidLoad ForgotPasswordPage');
   }
 
-  forgotpassword(obj: obj) {
-    this.art.forgotpassword(this.obj.email).then(() => {
+  forgotpassword(email) {
+    this.art.forgotpassword(email).then(() => {
       // this.navCtrl.setRoot(SignupPage);
     }, (error)=>{
-      alert(error)
+      // alert(error)
+
+      const alert = this.alertCtrl.create({
+        title: "Oh no! ",
+        subTitle: "Please enter your email and password to login.",
+        buttons: ['OK'],
+        cssClass: "myAlert",
+      });
+      alert.present();
     })     
     // this.obj.email ="";    
   }

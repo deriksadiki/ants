@@ -50,7 +50,8 @@ export class UploadImagePage {
           let alert = this.alertCtrl.create({
             title: "Oh no!",
             subTitle: "your photo is too large, please choose a photo with 1.5MB or less.",
-            buttons: ['OK']
+            buttons: ['OK'],
+            cssClass: "myAlert",
           });
           alert.present();
         }
@@ -106,6 +107,7 @@ export class UploadImagePage {
       const confirm = this.alertCtrl.create({
         title: "Fields Missing",
         subTitle: "Please make sure that all fields are filled.",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Ok',
@@ -133,6 +135,7 @@ export class UploadImagePage {
       const confirm = this.alertCtrl.create({
         title: "price",
         subTitle: "the price should not be more than 9999",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Ok',
@@ -144,8 +147,9 @@ export class UploadImagePage {
       confirm.present();
     } else if (this.url == '../../assets/default.jpg') {
       const confirm = this.alertCtrl.create({
-        title: "uploadImage",
+        // title: "uploadImage",
         subTitle: "please select a imagine to continue..",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Ok',
@@ -160,6 +164,7 @@ export class UploadImagePage {
       const confirm = this.alertCtrl.create({
         title: "location",
         subTitle: "please select a location to continue..",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Ok',
@@ -174,6 +179,7 @@ export class UploadImagePage {
       const confirm = this.alertCtrl.create({
         title: "name",
         subTitle: "please select a name to continue..",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Ok',
@@ -188,6 +194,7 @@ export class UploadImagePage {
       const confirm = this.alertCtrl.create({
         title: "description",
         subTitle: "please select a description to continue..",
+        cssClass: "myAlert",
         buttons: [
           {
             text: 'Ok',
@@ -204,6 +211,7 @@ export class UploadImagePage {
           const confirm = this.alertCtrl.create({
             title: "Thank you",
             subTitle: "Your artwork will be available on the app as soon as it has been approved",
+            cssClass: "myAlert",
             buttons: [
               {
                 text: 'Ok',
