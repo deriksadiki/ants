@@ -299,7 +299,7 @@ export class StreetartzProvider {
       duration: 8000
     });
     const toast = this.toastCtrl.create({
-      message: "your imagine had been uploaded!",
+      message: "Your imagine has been uploaded!",
       duration: 3000
     });
     loading.present();
@@ -414,18 +414,18 @@ export class StreetartzProvider {
       duration: 2000
     });
     const toast = this.toastCtrl.create({
-      message: "data has been updated!",
+      message: "Your Profile has been updated!",
       duration: 3000
     });
     return new Promise((accpt, rejc) => {
       this.ngzone.run(() => {
-        toast.present();
         firebase
           .storage()
           .ref(name)
           .putString(pic, "data_url")
           .then(
             () => {
+              toast.present();
               accpt(name);
               console.log(name);
             },
@@ -658,12 +658,7 @@ export class StreetartzProvider {
     });
   }
   viewPicMain() {
-    let loader = this.loadingCtrl.create({
-      spinner: "bubbles",
-      content: "Loading...",
-      duration: 4000000000000000000
-    });
-    loader.present();
+
     return new Promise((accpt, rejc) => {
       firebase
         .database()
@@ -714,8 +709,8 @@ export class StreetartzProvider {
               console.log("empty");
             }
           }),
-            loader.dismiss();
-          accpt(this.DisplayArrUploads);
+
+            accpt(this.DisplayArrUploads);
         });
     });
   }
@@ -760,7 +755,6 @@ export class StreetartzProvider {
     this.keyArr.length = 0;
     return new Promise((accpt, rejc) => {
       this.ngzone.run(() => {
-        var user = firebase.auth().currentUser;
         firebase
           .database()
           .ref("comments/" + key)
@@ -777,7 +771,6 @@ export class StreetartzProvider {
                   var chckId = CommentDetails[key].uid;
                   let obj = {
                     comment: CommentDetails[key].comment,
-                    uid: user.uid,
                     url: this.url,
                     date: moment(
                       CommentDetails[key].date,
@@ -940,6 +933,9 @@ export class StreetartzProvider {
 
   BuyPicture(artkey, userkey, message, picKey) {
     console.log(picKey);
+    console.log(artkey);
+    console.log(userkey);
+    console.log(message);
     return new Promise((accpt, rej) => {
       this.ngzone.run(() => {
         let dateObj = new Date();
@@ -947,8 +943,7 @@ export class StreetartzProvider {
         let time = dateObj
           .toTimeString()
           .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
-        var resuls;
-
+        var resuls = true;
         firebase
           .database()
           .ref("messages/" + artkey)
@@ -1347,20 +1342,25 @@ export class StreetartzProvider {
     return new Promise((accpt, rej) => {
       var currentUser = firebase.auth().currentUser.uid;
       firebase.database().ref('Orders/' + id).on('value', data => {
-        var details = data.val();
-        var keys = Object.keys(details);
-        for (var x = 0; x < keys.length; x++) {
-          var k = keys[x];
-          console.log(key);
+        if (data.val() != undefined || data.val() != null) {
+          var details = data.val();
+          var keys = Object.keys(details);
+          for (var x = 0; x < keys.length; x++) {
+            var k = keys[x];
+            console.log(key);
 
-          if (details[k].currentUserId == currentUser && details[k].artKey == key) {
-            console.log('found');
-            accpt(1)
-            break;
+            if (details[k].currentUserId == currentUser && details[k].artKey == key) {
+              console.log('found');
+              accpt(1)
+              break;
+            }
           }
+          console.log('not found');
+          accpt(0)
         }
-        console.log('not found');
-        accpt(0)
+        else {
+          accpt(0)
+        }
       })
     })
   }
@@ -1410,22 +1410,24 @@ export class StreetartzProvider {
       for (var x = 0; x < data.length; x++) {
         console.log(data[x].path);
         firebase.database().ref(data[x].path).limitToLast(1).on('value', data2 => {
-          var details = data2.val();
-          var keys = Object.keys(details)
-          let obj = {
-            artKey: details[keys[0]].artKey,
-            time: details[keys[0]].time,
-            lastMesag: details[keys[0]].message,
-            id: details[keys[0]].uid
+          if (data2.val() != undefined || data2.val() != null) {
+            var details = data2.val();
+            var keys = Object.keys(details)
+            let obj = {
+              artKey: details[keys[0]].artKey,
+              time: details[keys[0]].time,
+              lastMesag: details[keys[0]].message,
+              id: details[keys[0]].uid
+            }
+            this.step2Arr.push(obj)
           }
-          this.step2Arr.push(obj)
         })
       }
       setTimeout(() => {
         this.step3(data, this.step2Arr).then(() => {
           pass('')
         })
-      }, 1200);
+      }, 1400);
     })
   }
 
@@ -1452,6 +1454,11 @@ export class StreetartzProvider {
   combine(users, mes, pro) {
     return new Promise((accpt, rej) => {
       setTimeout(() => {
+        console.log(users);
+        console.log(mes);
+        console.log(pro);
+        console.log(users.length);
+
         for (var x = 0; x < users.length; x++) {
           this.setConversation(pro[x].url, mes[x].lastMesag, mes[x].time, pro[x].name, users[x].path, users[x].id, users[x].url, mes[x].artKey)
         }
@@ -1459,7 +1466,7 @@ export class StreetartzProvider {
         this.step2Arr.length = 0;
         // this.step3Arr.length = 0;
         accpt('')
-      }, 700);
+      }, 900);
     })
   }
 
