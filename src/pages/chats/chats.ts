@@ -59,7 +59,8 @@ export class ChatsPage {
     let loading = this.loadingCtrl.create({
       spinner: "bubbles",
       content: "Please wait...",
-      duration: 4000000
+      duration: 4000000,
+      cssClass: "myAlert",
     });
     loading.present();
     this.art.getSentMessages().then(database => {

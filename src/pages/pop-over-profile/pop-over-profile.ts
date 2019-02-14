@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { StreetartzProvider } from '../../providers/streetart-database/streetart-database';
-import { EditProfilePage } from '../edit-profile/edit-profile';
-import { LoginPage } from '../login/login';
-import { AlertController } from 'ionic-angular';
-import { obj } from '../../app/class';
-import { LoadingController } from 'ionic-angular';
+import { Component, OnInit } from "@angular/core";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  ViewController
+} from "ionic-angular";
+import { StreetartzProvider } from "../../providers/streetart-database/streetart-database";
+import { EditProfilePage } from "../edit-profile/edit-profile";
+import { LoginPage } from "../login/login";
+import { AlertController } from "ionic-angular";
+import { obj } from "../../app/class";
+import { LoadingController } from "ionic-angular";
 
 /**
  * Generated class for the PopOverProfilePage page.
@@ -16,8 +21,8 @@ import { LoadingController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-pop-over-profile',
-  templateUrl: 'pop-over-profile.html',
+  selector: "page-pop-over-profile",
+  templateUrl: "pop-over-profile.html"
 })
 export class PopOverProfilePage {
   // obj;
@@ -28,24 +33,27 @@ export class PopOverProfilePage {
   ionViewDidLoad() {
     // console.log('ionViewDidLoad PopOverProfilePage');
   }
+
   nextpage() {
     this.verified = this.art.verify();
     if (this.verified == 0) {
       let alert = this.alertCtrl.create({
-        title: 'Email Verification',
-        message: 'We have sent you a verification mail, Please activate your account with the link in the mail. If you cannot find the mail, please click send so that we can resend it.',
+        title: "Email not verified",
+        message:
+          "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+        cssClass: "myAlert",
         buttons: [
           {
-            text: 'Cancel',
-            role: 'cancel',
+            text: "Cancel",
+            role: "cancel",
             handler: () => {
-              console.log('Cancel');
+              console.log("Cancel");
             }
           },
           {
-            text: 'Send',
+            text: "Resend",
             handler: () => {
-              this.art.sendVerificationLink();
+              this.art.checkVerificatiom();
             }
           }
         ]
@@ -59,18 +67,13 @@ export class PopOverProfilePage {
     }
   }
   logout() {
-    this.art.logout().then(() => {
-      this.navCtrl.push(LoginPage);
-    }, (error) => {
-      console.log(error.message);
-    })
+    this.art.logout().then(
+      () => {
+        this.navCtrl.push(LoginPage);
+      },
+      error => {
+        console.log(error.message);
+      }
+    );
   }
-
-
-
-
-
-
-
-
 }
