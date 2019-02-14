@@ -1463,24 +1463,7 @@ export class StreetartzProvider {
     })
   }
 
-  // getProfiles(data) {
-  //   return new Promise((accpt, rej) => {
-  //     console.log(data.length);
-  //     var temp = data;
-  //     console.log(data[0]);
-  //     var artKey = data[0].artKey
-  //     var lastMesag = data[0].lastMesag
-  //     var time = data[0].time
-  //     var path = data[0].path;
-  //     var url = data[0].url
-  //     var id = data[0].id
-  //     firebase.database().ref('profiles/' + data[0].id).on('value', profile => {
-  //       console.log(lastMesag);
-  //       this.setConversation(profile.val().downloadurl, lastMesag, time, profile.val().name, path, id, url, artKey)
-  //     })
-  //     accpt('')
-  //   })
-  // }
+
   setConversation(image, lastMessage, time, name, path, id, pic, key) {
     console.log(key);
     var currentUser = firebase.auth().currentUser.uid;

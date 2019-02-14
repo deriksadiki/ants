@@ -234,12 +234,6 @@ export class ViewPage implements OnInit {
                   console.log('Cancel');
                 }
               },
-              {
-                text: 'Send',
-                handler: () => {
-                  this.art.checkVerificatiom();
-                }
-              }
             ]
           });
           alert.present();

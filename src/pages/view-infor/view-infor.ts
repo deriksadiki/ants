@@ -81,13 +81,6 @@ export class ViewInforPage {
   }
 
   getData(path) {
-    // this.arrMsg.length = 0;
-    // console.log(this.arrMsg);
-    // console.log('nothing man');
-    // this.art.retrieveChats(this.uid, this.currentUserId, this.message, this.key).then((data: any) => {
-    //   this.arrMsg = data;
-    //   this.message = "";
-    // })
     console.log(path)
     this.arrMsg.length = 0;
     this.art.retrieveAllChats(path).then((data: any) => {
