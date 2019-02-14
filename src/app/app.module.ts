@@ -34,13 +34,15 @@ import { SendEmailProvider } from '../providers/send-email/send-email';
 
 
 firebase.initializeApp({
-  apiKey: "AIzaSyB6pOe3yLnWgwxG7UADv93MUgm_8S7ipzQ",
-  authDomain: "street-arts.firebaseapp.com",
-  databaseURL: "https://street-arts.firebaseio.com",
-  projectId: "street-arts",
-  storageBucket: "street-arts.appspot.com",
-  messagingSenderId: "326198585168"
+  apiKey: "AIzaSyAxsIX8mrI7nFs-Shij7vjfXEgm-snp9fc",
+      authDomain: "streetarts2019latestbyderik.firebaseapp.com",
+      databaseURL: "https://streetarts2019latestbyderik.firebaseio.com",
+      projectId: "streetarts2019latestbyderik",
+      storageBucket: "streetarts2019latestbyderik.appspot.com",
+      messagingSenderId: "60147583000"
 })
+
+
 
 @NgModule({
   declarations: [

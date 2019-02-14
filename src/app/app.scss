@@ -23,6 +23,7 @@
     width: 50%;
     //   border: 1px solid color($colors, primary, base);
     margin: 0 auto;
+    text-transform: uppercase;
   }
   .alert-message {
     color: white; // text color for confirm alerts
@@ -30,6 +31,10 @@
   .alert-wrapper {
     background-color: color($colors, secAlert, base); // bg color of alert content
     border-radius: 10px;
+    color: white;
+  }
+  .alert-subTitle{
+    color: white;
   }
 }
 

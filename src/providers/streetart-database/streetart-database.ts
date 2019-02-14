@@ -194,7 +194,8 @@ export class StreetartzProvider {
             ) {
               const alert = this.alertCtrl.create({
                 subTitle:
-                  "It seems like you have not registered to use StreetArt, please check your login information or sign up to get started",
+                  "It looks like you have not registered to use StreetArtz, please check your login information or sign up to get started",
+                  cssClass : "myAlert",
                 buttons: [
                   {
                     text: "ok",
@@ -208,6 +209,7 @@ export class StreetartzProvider {
             } else {
               const alert = this.alertCtrl.create({
                 subTitle: error.message,
+                cssClass : "myAlert",
                 buttons: [
                   {
                     text: "ok",
@@ -248,6 +250,7 @@ export class StreetartzProvider {
       if (email == null || email == undefined) {
         const alert = this.alertCtrl.create({
           subTitle: "Please enter your Email.",
+          cssClass : "myAlert",
           buttons: ["OK"]
         });
         alert.present();
@@ -261,7 +264,8 @@ export class StreetartzProvider {
                 title: "Password request Sent",
                 subTitle:
                   "We've sent you and email with a reset link, go to your email to recover your account.",
-                buttons: ["OK"]
+                buttons: ["OK"],
+                cssClass : "myAlert",
               });
               alert.present();
               resolve();
@@ -269,7 +273,8 @@ export class StreetartzProvider {
             Error => {
               const alert = this.alertCtrl.create({
                 subTitle: Error.message,
-                buttons: ["OK"]
+                buttons: ["OK"],
+                cssClass : "myAlert",
               });
               alert.present();
               resolve();
@@ -279,6 +284,7 @@ export class StreetartzProvider {
     }).catch(error => {
       const alert = this.alertCtrl.create({
         subTitle: error.message,
+        cssClass : "myAlert",
         buttons: [
           {
             text: "ok",

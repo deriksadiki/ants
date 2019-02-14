@@ -232,7 +232,7 @@ export class ViewPage implements OnInit {
           {
             text: 'Resend',
             handler: () => {
-              this.art.sendVerificationLink();
+              this.art.sendVerificationLink();  
             }
           }
         ]
