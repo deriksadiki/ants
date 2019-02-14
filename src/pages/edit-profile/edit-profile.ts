@@ -5,6 +5,7 @@ import { LoadingController } from 'ionic-angular';
 import { ProfilePage } from '../profile/profile';
 import { ToastController } from 'ionic-angular';
 import { ChangeDetectorRef } from '@angular/core';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 /**
  * Generated class for the EditProfilePage page.
  *
@@ -33,7 +34,7 @@ export class EditProfilePage implements OnInit {
   downloadurl
   imageUrl: any;
 
-  constructor(public cdRef: ChangeDetectorRef, public navCtrl: NavController, public navParams: NavParams, public art: StreetartzProvider, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+  constructor(public cdRef: ChangeDetectorRef, public navCtrl: NavController, public navParams: NavParams, public art: StreetartzProvider, public loadingCtrl: LoadingController, public toastCtrl: ToastController, public alertCtrl: AlertController, private camera: Camera) {
 
   }
   GoToProfile() {
@@ -58,15 +59,22 @@ export class EditProfilePage implements OnInit {
     this.contact = value.length < 10 ? value.substring(0, 10) : value;
   }
 
-
-  insertpic(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      let reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.downloadurl = event.target.result;
-      }
-      reader.readAsDataURL(event.target.files[0]);
+  setImage(k) {
+    this.downloadurl = k;
+  }
+  insertpic() {
+    const options: CameraOptions = {
+      quality: 70,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      saveToPhotoAlbum: false
     }
+    this.camera.getPicture(options).then((imageData) => {
+      var x = 'data:image/jpeg;base64,' + imageData;
+      this.setImage(x);
+    }, (err) => {
+      console.log(err);
+    });
 
   }
   uploadPicture() {

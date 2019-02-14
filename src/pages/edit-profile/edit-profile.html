@@ -20,7 +20,7 @@
       <label for="file" id="cam">
         <ion-icon ios="ios-create" md="md-create"></ion-icon>
       </label>
-      <input id="file" type="file" accept="image/*" (change)="insertpic($event)">
+      <input id="file" type="file" accept="image/*" (click)="insertpic()">
     </div>
     <img [src]="downloadurl">
   </div>
@@ -44,7 +44,8 @@
     <ion-label>
       <ion-icon name="call"></ion-icon>
     </ion-label>
-    <ion-input type="number" [value]="contact" [(ngModel)]="contact" maxlength="10"  (ngModelChange)="change($event)" placeholder="Mobile"></ion-input>
+    <ion-input type="number" [value]="contact" [(ngModel)]="contact" maxlength="10" (ngModelChange)="change($event)"
+      placeholder="Mobile"></ion-input>
   </ion-item>
   <br>
   <ion-textarea id="areaText" type="text" [value]="bio" [(ngModel)]="bio" placeholder="Bio"></ion-textarea>
