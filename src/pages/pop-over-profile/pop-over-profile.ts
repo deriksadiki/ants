@@ -26,19 +26,14 @@ import { LoadingController } from "ionic-angular";
 })
 export class PopOverProfilePage {
   // obj;
-  constructor(
-    public viewCrtl: ViewController,
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public art: StreetartzProvider,
-    public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController
-  ) {}
+  verified
+  constructor(public viewCrtl: ViewController, public navCtrl: NavController, public navParams: NavParams, public art: StreetartzProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  }
 
   ionViewDidLoad() {
     // console.log('ionViewDidLoad PopOverProfilePage');
   }
-  verified;
+
   nextpage() {
     this.verified = this.art.verify();
     if (this.verified == 0) {
@@ -64,8 +59,9 @@ export class PopOverProfilePage {
         ]
       });
       alert.present();
-      this.viewCrtl.dismiss();
-    } else {
+
+    }
+    else {
       this.navCtrl.push(EditProfilePage);
       this.viewCrtl.dismiss();
     }

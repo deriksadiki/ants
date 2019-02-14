@@ -92,28 +92,34 @@ export class StreetartzProvider {
     if (user.emailVerified == false) {
       user.sendEmailVerification();
       let alert = this.alertCtrl.create({
-        title: "",
-        subTitle:
-          "We have sent you an email with a verification link, click the link on the email to verify your account.",
-        buttons: ["OK"],
-        cssClass: "myAlert"
+        title: '',
+        subTitle: "We have sent you a verification mail, Please activate your account with the link in the mail",
+        buttons: ['OK']
       });
       alert.present();
       return 0;
-    } else {
+    }
+    else {
       return 1;
     }
+
   }
 
   verify() {
-    console.log("checking ferification");
+    console.log('checking ferification');
     var user = firebase.auth().currentUser;
     console.log(user);
     if (user.emailVerified == false) {
       return 0;
-    } else {
+    }
+    else {
       return 1;
     }
+  }
+
+  sendVerificationLink() {
+    var user = firebase.auth().currentUser;
+    user.sendEmailVerification();
   }
 
   register(email, password, name) {
@@ -122,8 +128,7 @@ export class StreetartzProvider {
         let loading = this.loadingCtrl.create({
           spinner: "bubbles",
           content: "Signing in....",
-          duration: 4000000,
-          cssClass: "myAlert1"
+          duration: 4000000
         });
         loading.present();
         return firebase
@@ -144,12 +149,12 @@ export class StreetartzProvider {
               });
             resolve();
             loading.dismiss();
+
           })
           .catch(error => {
             loading.dismiss();
             const alert = this.alertCtrl.create({
               subTitle: error.message,
-              cssClass: "myAlert",
               buttons: [
                 {
                   text: "ok",
@@ -190,7 +195,6 @@ export class StreetartzProvider {
               const alert = this.alertCtrl.create({
                 subTitle:
                   "It seems like you have not registered to use StreetArt, please check your login information or sign up to get started",
-                cssClass: "myAlert",
                 buttons: [
                   {
                     text: "ok",
@@ -204,7 +208,6 @@ export class StreetartzProvider {
             } else {
               const alert = this.alertCtrl.create({
                 subTitle: error.message,
-                cssClass: "myAlert",
                 buttons: [
                   {
                     text: "ok",
@@ -245,8 +248,7 @@ export class StreetartzProvider {
       if (email == null || email == undefined) {
         const alert = this.alertCtrl.create({
           subTitle: "Please enter your Email.",
-          buttons: ["OK"],
-          cssClass: "myAlert"
+          buttons: ["OK"]
         });
         alert.present();
       } else if (email != null || email != undefined) {
@@ -258,9 +260,8 @@ export class StreetartzProvider {
               const alert = this.alertCtrl.create({
                 title: "Password request Sent",
                 subTitle:
-                  "We've sent you and email with a reset link, go to your email and click the link to recover your account.",
-                buttons: ["OK"],
-                cssClass: "myAlert"
+                  "We've sent you and email with a reset link, go to your email to recover your account.",
+                buttons: ["OK"]
               });
               alert.present();
               resolve();
@@ -268,8 +269,7 @@ export class StreetartzProvider {
             Error => {
               const alert = this.alertCtrl.create({
                 subTitle: Error.message,
-                buttons: ["OK"],
-                cssClass: "myAlert"
+                buttons: ["OK"]
               });
               alert.present();
               resolve();
@@ -279,7 +279,6 @@ export class StreetartzProvider {
     }).catch(error => {
       const alert = this.alertCtrl.create({
         subTitle: error.message,
-        cssClass: "myAlert",
         buttons: [
           {
             text: "ok",
@@ -709,6 +708,7 @@ export class StreetartzProvider {
 
                 this.storeImgur(uploads3[keys1[0]].downloadurl);
               }
+
             } else {
               this.DisplayArrUploads = null;
               console.log("empty");
@@ -949,22 +949,22 @@ export class StreetartzProvider {
           .replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
         var resuls;
 
-        // firebase
-        // .database()
-        // .ref("messages/" + artkey)
-        // .child(userkey)
-        // .push({
-        //   message: message,
-        //   uid: currentUser,
-        //   time: time,
-        //   status: resuls,
-        //   artKey: picKey
-        // });
+        firebase
+          .database()
+          .ref("messages/" + artkey)
+          .child(userkey)
+          .push({
+            message: message,
+            uid: currentUser,
+            time: time,
+            status: resuls,
+            artKey: picKey
+          });
 
         resuls = false;
         firebase
           .database()
-          .ref("messages/" + userkey + "/" + artkey + "/" + picKey)
+          .ref("messages2/" + userkey + '/' + artkey + '/' + picKey)
           .push({
             message: message,
             uid: currentUser,
@@ -1047,7 +1047,7 @@ export class StreetartzProvider {
               .child(artkey)
               .on("value", data2 => {
                 this.arrMssg.length = 0;
-                console.log("get chats");
+                console.log('get chats');
                 let infor2 = data2.val();
                 if (data2.val() != null || data2.val() != undefined) {
                   this.arrMssg.length = 0;
@@ -1281,158 +1281,126 @@ export class StreetartzProvider {
   getSentMessages() {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
-      this.conversation.length = 0;
-      this.allMessages.length = 0;
-      firebase
-        .database()
-        .ref("messages2/" + currentUser)
-        .on("value", data => {
-          if (data.val() != undefined || data.val() != undefined) {
-            var destinationIDs = data.val();
-            var destKeys = Object.keys(destinationIDs);
-            for (var x = 0; x < destKeys.length; x++) {
-              firebase
-                .database()
-                .ref("messages2/" + currentUser + "/" + destKeys[x])
-                .on("value", artKeys => {
-                  if (artKeys.val() != undefined || artKeys.val() != null) {
-                    var artskeyz = artKeys.val();
-                    var artKeyzz = Object.keys(artskeyz);
-                    for (var i = 0; i < artKeyzz.length; i++) {
-                      firebase
-                        .database()
-                        .ref(
-                          "messages2/" +
-                            currentUser +
-                            "/" +
-                            destKeys[x] +
-                            "/" +
-                            artKeyzz[i]
-                        )
-                        .on("value", messages => {
-                          if (messages.val() != undefined || messages.val()) {
-                            var messg = messages.val();
-                            var msgKeys = Object.keys(messg);
-                            var artKey;
-                            var lastMesag;
-                            var time;
-                            var destKey = destKeys[x];
-                            var path =
-                              "messages2/" +
-                              currentUser +
-                              "/" +
-                              destKeys[x] +
-                              "/" +
-                              artKeyzz[i];
-                            for (var y = 0; y < msgKeys.length; y++) {
-                              artKey = messg[msgKeys[y]].artKey;
-                              lastMesag = messg[msgKeys[y]].message;
-                              time = messg[msgKeys[y]].time;
+      firebase.database().ref('messages2/' + currentUser).on('value', data => {
+        if (data.val() != undefined || data.val() != undefined) {
+          this.conversation.length = 0;
+          var destinationIDs = data.val();
+          var destKeys = Object.keys(destinationIDs);
+          for (var x = 0; x < destKeys.length; x++) {
+            firebase.database().ref('messages2/' + currentUser + '/' + destKeys[x]).on('value', artKeys => {
+              if (artKeys.val() != undefined || artKeys.val() != null) {
+                var artskeyz = artKeys.val();
+                var artKeyzz = Object.keys(artskeyz);
+                for (var i = 0; i < artKeyzz.length; i++) {
+                  firebase.database().ref('messages2/' + currentUser + '/' + destKeys[x] + '/' + artKeyzz[i]).on('value', messages => {
+                    if (messages.val() != undefined || messages.val()) {
+                      var messg = messages.val();
+                      var msgKeys = Object.keys(messg);
+                      var artKey;
+                      var lastMesag;
+                      var time;
+                      var destKey = destKeys[x]
+                      var path = 'messages2/' + currentUser + '/' + destKeys[x] + '/' + artKeyzz[i];
+                      for (var y = 0; y < msgKeys.length; y++) {
+                        artKey = messg[msgKeys[y]].artKey;
+                        lastMesag = messg[msgKeys[y]].message;
+                        time = messg[msgKeys[y]].time;
+                      }
+                      firebase.database().ref('Orders/' + destKeys[x]).on('value', orders => {
+                        if (orders.val() != undefined || orders.val() != null) {
+                          var allOrders = orders.val();
+                          var OrdersKey = Object.keys(allOrders);
+                          for (var z = 0; z < OrdersKey.length; z++) {
+                            var k = OrdersKey[z]
+                            var keyArt = allOrders[k].artKey;
+                            if (keyArt == artKey) {
+                              console.log(destKey);
+                              firebase.database().ref('profiles/' + destKey).on('value', profile => {
+                                console.log(profile.val());
+                                this.setConversation(profile.val().downloadurl, lastMesag, time, profile.val().name, path, destKey, allOrders[k].downloadurl, artKey)
+                              })
                             }
-                            firebase
-                              .database()
-                              .ref("Orders/" + destKeys[x])
-                              .on("value", orders => {
-                                if (
-                                  orders.val() != undefined ||
-                                  orders.val() != null
-                                ) {
-                                  var allOrders = orders.val();
-                                  var OrdersKey = Object.keys(allOrders);
-                                  for (var z = 0; z < OrdersKey.length; z++) {
-                                    var k = OrdersKey[z];
-                                    var keyArt = allOrders[k].artKey;
-                                    if (keyArt == artKey) {
-                                      console.log(destKey);
-                                      firebase
-                                        .database()
-                                        .ref("profiles/" + destKey)
-                                        .on("value", profile => {
-                                          console.log(profile.val());
-                                          this.setConversation(
-                                            profile.val().downloadurl,
-                                            lastMesag,
-                                            time,
-                                            profile.val().name,
-                                            path,
-                                            destKey,
-                                            allOrders[k].downloadurl,
-                                            artKey
-                                          );
-                                        });
-                                    }
-                                  }
-                                }
-                              });
                           }
-                        });
-                      console.log("nothing found");
-                      pass("");
+                        }
+                      })
                     }
-                  }
-                });
-            }
-          } else {
-            console.log("nothing found");
-            pass("");
-            this.conversation.length = 0;
-            this.allMessages.length = 0;
+                  })
+                  console.log('nothing found');
+                  pass('')
+                }
+              }
+            })
           }
-        });
-    });
+        }
+        else {
+          console.log('nothing found');
+          pass('')
+          this.conversation.length = 0;
+          this.allMessages.length = 0;
+        }
+      })
+    })
   }
+
 
   checkOrderState(id, key) {
     return new Promise((accpt, rej) => {
       var currentUser = firebase.auth().currentUser.uid;
-      firebase
-        .database()
-        .ref("Orders/" + currentUser)
-        .on("value", data => {});
-    });
+      firebase.database().ref('Orders/' + id).on('value', data => {
+        var details = data.val();
+        var keys = Object.keys(details);
+        for (var x = 0; x < keys.length; x++) {
+          var k = keys[x];
+          console.log(key);
+
+          if (details[k].currentUserId == currentUser && details[k].artKey == key) {
+            console.log('found');
+            accpt(1)
+            break;
+          }
+        }
+        console.log('not found');
+        accpt(0)
+      })
+    })
   }
 
   tempMsgArray = new Array();
   getDirectMessgs() {
     return new Promise((pass, fail) => {
       var currentUser = firebase.auth().currentUser.uid;
-      firebase
-        .database()
-        .ref("Orders/" + currentUser)
-        .on("value", data => {
-          if (data.val() != undefined || data.val() != null) {
-            console.log("direct");
-            this.tempMsgArray.length = 0;
-            var orders = data.val();
-            var keys = Object.keys(orders);
-            var artKey;
-            var lastMesag;
-            var time;
-            var path;
-            for (var x = 0; x < keys.length; x++) {
-              var k = keys[x];
-              path =
-                "messages2/" +
-                orders[k].currentUserId +
-                "/" +
-                currentUser +
-                "/" +
-                orders[k].artKey;
-              let Obj = {
-                path: path,
-                id: orders[k].currentUserId,
-                url: orders[k].downloadurl
-              };
-              this.tempMsgArray.push(Obj);
+      firebase.database().ref('Orders/' + currentUser).on('value', data => {
+        this.tempMsgArray.length = 0;
+        this.step2Arr.length = 0;
+        this.step3Arr.length = 0;
+        if (data.val() != undefined || data.val() != null) {
+          console.log('direct');
+          this.tempMsgArray.length = 0;
+          var orders = data.val();
+          var keys = Object.keys(orders)
+          var artKey;
+          var lastMesag;
+          var time;
+          var path;
+          for (var x = 0; x < keys.length; x++) {
+            var k = keys[x]
+            path = 'messages2/' + orders[k].currentUserId + '/' + currentUser + '/' + orders[k].artKey;
+            let Obj = {
+              path: path,
+              id: orders[k].currentUserId,
+              url: orders[k].downloadurl,
             }
-            this.step2(this.tempMsgArray).then(() => {
-              pass("");
-            });
-          } else {
-            pass("");
+            this.tempMsgArray.push(Obj)
           }
-        });
-    });
+          this.step2(this.tempMsgArray).then(() => {
+            pass('')
+          })
+        }
+        else {
+          pass('')
+        }
+      })
+    })
   }
 
   step2Arr = new Array();
@@ -1441,71 +1409,58 @@ export class StreetartzProvider {
       console.log(data);
       for (var x = 0; x < data.length; x++) {
         console.log(data[x].path);
-        firebase
-          .database()
-          .ref(data[x].path)
-          .limitToLast(1)
-          .on("value", data2 => {
-            var details = data2.val();
-            var keys = Object.keys(details);
-            let obj = {
-              artKey: details[keys[0]].artKey,
-              time: details[keys[0]].time,
-              lastMesag: details[keys[0]].message,
-              id: details[keys[0]].uid
-            };
-            this.step2Arr.push(obj);
-          });
+        firebase.database().ref(data[x].path).limitToLast(1).on('value', data2 => {
+          var details = data2.val();
+          var keys = Object.keys(details)
+          let obj = {
+            artKey: details[keys[0]].artKey,
+            time: details[keys[0]].time,
+            lastMesag: details[keys[0]].message,
+            id: details[keys[0]].uid
+          }
+          this.step2Arr.push(obj)
+        })
       }
       setTimeout(() => {
         this.step3(data, this.step2Arr).then(() => {
-          pass("");
-        });
-      }, 1000);
-    });
+          pass('')
+        })
+      }, 1200);
+    })
   }
 
   step3Arr = new Array();
   step3(users, messgages) {
     return new Promise((pass, fail) => {
       for (var x = 0; x < messgages.length; x++) {
-        firebase
-          .database()
-          .ref("profiles/" + users[x].id)
-          .on("value", data2 => {
+        if (users[x] != undefined || users[x] != null) {
+          firebase.database().ref('profiles/' + users[x].id).on('value', data2 => {
             let obj = {
               url: data2.val().downloadurl,
               name: data2.val().name
-            };
-            this.step3Arr.push(obj);
-          });
+            }
+            this.step3Arr.push(obj)
+          })
+        }
       }
-      console.log();
-
       this.combine(users, messgages, this.step3Arr).then(() => {
-        pass("");
-      });
-    });
+        pass('')
+      })
+    })
   }
 
   combine(users, mes, pro) {
     return new Promise((accpt, rej) => {
       setTimeout(() => {
         for (var x = 0; x < users.length; x++) {
-          this.setConversation(
-            pro[x].url,
-            mes[x].lastMesag,
-            mes[x].time,
-            pro[x].name,
-            users[x].path,
-            users[x].id,
-            users[x].url,
-            mes[x].artKey
-          );
+          this.setConversation(pro[x].url, mes[x].lastMesag, mes[x].time, pro[x].name, users[x].path, users[x].id, users[x].url, mes[x].artKey)
         }
-        accpt("");
+        // this.tempMsgArray.length = 0;
+        this.step2Arr.length = 0;
+        // this.step3Arr.length = 0;
+        accpt('')
       }, 700);
-    });
+    })
   }
 
   // getProfiles(data) {
@@ -1543,12 +1498,13 @@ export class StreetartzProvider {
     this.conversation.push(msgObj);
     console.log("aassignnn");
     console.log(this.conversation);
+
   }
 
   getAllConvo() {
     return new Promise((accpt, rej) => {
-      accpt(this.conversation);
-    });
+      accpt(this.conversation)
+    })
 
     // return new Promise((accpt, rej) =>{
     //   console.log('returning messages');
@@ -1556,4 +1512,5 @@ export class StreetartzProvider {
     // accpt (this.conversation);
     // })
   }
+
 }

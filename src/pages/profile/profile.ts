@@ -68,7 +68,7 @@ export class ProfilePage {
           {
             text: 'Resend',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]
@@ -100,7 +100,7 @@ export class ProfilePage {
           {
             text: 'Resend link',
             handler: () => {
-              this.art.checkVerificatiom();
+              this.art.sendVerificationLink();
             }
           }
         ]

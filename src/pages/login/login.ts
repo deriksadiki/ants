@@ -39,7 +39,7 @@ export class LoginPage {
     this.navCtrl.setRoot(EulaPage);
   }
   login(email, password) {
-    console.log(email);
+    console.log(email,password);
    
     if (email == undefined || email == null 
       && password == undefined) {
@@ -71,7 +71,7 @@ export class LoginPage {
     }
     else {
  
-      this.art.login(email, password).then(() => {
+      this.art.login(email,password).then(() => {
         // this.presentLoading1();
         this.navCtrl.setRoot(CategoryPage);
       }, (error) => {
@@ -88,7 +88,7 @@ export class LoginPage {
   }
 
   explore(){
-    this.navCtrl.setRoot(CategoryPage)
+    this.navCtrl.setRoot(CategoryPage);
   }
 
 }
