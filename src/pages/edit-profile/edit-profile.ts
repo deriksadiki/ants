@@ -89,12 +89,19 @@ export class EditProfilePage implements OnInit {
       alert.present();
     }
     else {
+      let loading = this.loadingCtrl.create({
+        spinner: "bubbles",
+        content: "Signing in....",
+        duration: 4000000
+      });
+      loading.present();
       this.art.uploadProfilePic(this.downloadurl, this.name).then(data => {
         console.log('added to db');
         this.art.update(this.name, this.email, this.contact, this.bio, this.downloadurl).then((data) => {
           this.arr.push(data);
         })
         this.navCtrl.pop();
+        loading.dismiss();
       },
         Error => {
           // console.log(Error)

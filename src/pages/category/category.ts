@@ -41,7 +41,34 @@ export class CategoryPage {
     this.retreivePics();
   }
   GoToProfilePage() {
-    this.navCtrl.push(ProfilePage)
+    this.art.checkstate().then((data: any) => {
+      if (data == 1) {
+        this.navCtrl.push(ProfilePage)
+      } else {
+        let alert = this.alertCtrl.create({
+          // title: 'Email not verified',
+          message: "You have to sign in before you can view your profile. Would you like to sign in now?",
+          cssClass: "myAlert",
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel');
+              }
+            },
+            {
+              text: 'Sign in',
+              handler: () => {
+                this.navCtrl.push(LoginPage)
+              }
+            }
+          ]
+        });
+        alert.present();
+      }
+    })
+
   }
 
   ionViewDidEnter() {
@@ -107,9 +134,16 @@ export class CategoryPage {
     })
   }
   retreivePics() {
+    let loader = this.loadingCtrl.create({
+      spinner: "bubbles",
+      content: "Loading...",
+      duration: 4000000000000000000
+    });
+    loader.present();
     this.art.viewPicMain().then((data: any) => {
       this.categoryArr = data;
       this.categoryArr.reverse();
+      loader.dismiss();
     })
   }
   pushArtistDetails(pic, name, key, url, comments, email, username, description, location, price, likes, name1, uid) {
@@ -132,34 +166,60 @@ export class CategoryPage {
 
   }
   chats() {
-    this.verified = this.art.verify();
-    if (this.verified == 0) {
-      let alert = this.alertCtrl.create({
-      title: 'Email not verified',
-      message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
-      cssClass: "myAlert",
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel');
-          }
-        },
-        {
-          text: 'Resend',
-          handler: () => {
-            this.art.checkVerificatiom();
-          }
+    this.art.checkstate().then((data: any) => {
+      if (data == 1) {
+        this.verified = this.art.verify();
+        if (this.verified == 0) {
+          let alert = this.alertCtrl.create({
+            title: 'Email not verified',
+            message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+            cssClass: "myAlert",
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel');
+                }
+              },
+              {
+                text: 'Resend',
+                handler: () => {
+                  this.art.checkVerificatiom();
+                }
+              }
+            ]
+          });
+          alert.present();
         }
-      ]
-    });
-    alert.present();
-
-    }
-    else {
-      this.navCtrl.push(ChatsPage)
-    }
+        else {
+          this.navCtrl.push(ChatsPage)
+        }
+      }
+      else {
+        let alert = this.alertCtrl.create({
+          // title: 'Email not verified',
+          message: "You have to sign in before you can view your messages, would you like to sign in now?",
+          cssClass: "myAlert",
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel');
+              }
+            },
+            {
+              text: 'Sign in',
+              handler: () => {
+                this.navCtrl.push(LoginPage)
+              }
+            }
+          ]
+        });
+        alert.present();
+      }
+    })
   }
 
 }

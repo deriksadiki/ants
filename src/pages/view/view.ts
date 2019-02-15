@@ -10,6 +10,7 @@ import { ToastController } from 'ionic-angular';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { SendEmailProvider } from '../../providers/send-email/send-email';
 import { CurrencyPipe } from '@angular/common'
+import { LoginPage } from '../login/login';
 
 
 /**
@@ -65,11 +66,10 @@ export class ViewPage implements OnInit {
   userId;
   display = [];
   tempemail;
-  clr = "";
+  clr = "light";
   obj = this.navParams.get("obj");
   constructor(public SendEmailProvider: SendEmailProvider, public navCtrl: NavController, public navParams: NavParams, public art: StreetartzProvider, private emailComposer: EmailComposer, public alertCtrl: AlertController, public toastCtrl: ToastController) {
     this.obj = this.navParams.get("obj");
-
 
     this.username = this.obj.username;
     this.downloadurl = this.obj.pic;
@@ -84,24 +84,30 @@ export class ViewPage implements OnInit {
     this.numlikes = this.obj.likes;
     this.name1 = this.obj.name1;
     this.uid = this.obj.uid
-    this.currentUserId = firebase.auth().currentUser.uid
-    this.Retrivecomments();
-    this.checkLikes();
 
-    this.art.returnUID().then((data) => {
-      this.tempName = data[0].name;
-      this.tempdownloadurl = data[0].downloadurl;
-      this.tempemail = data[0].email;
-      this.ifOrderYes();
+    this.Retrivecomments();
+
+    art.checkstate().then((data: any) => {
+      if (data == 1) {
+        this.currentUserId = firebase.auth().currentUser.uid
+        this.art.returnUID().then((data) => {
+          this.tempName = data[0].name;
+          this.tempdownloadurl = data[0].downloadurl;
+          this.tempemail = data[0].email;
+          this.ifOrderYes();
+          this.checkLikes();
+          this.Retrivecomments()
+          this.art.returnUID().then((data) => {
+            this.tempName = data[0].name;
+            this.tempdownloadurl = data[0].downloadurl;
+            this.ifOrderYes();
+          })
+        })
+      }
     })
   }
   ngOnInit() {
-    this.Retrivecomments()
-    this.art.returnUID().then((data) => {
-      this.tempName = data[0].name;
-      this.tempdownloadurl = data[0].downloadurl;
-      this.ifOrderYes();
-    })
+
   }
 
   imageSize() {
@@ -128,27 +134,27 @@ export class ViewPage implements OnInit {
       }
     })
   }
-  enable(event){
+  enable(event) {
     // console.log(this.comment.length);
-    var enabler = document.getElementsByClassName("overlay") as HTMLCollectionOf <HTMLElement>
+    var enabler = document.getElementsByClassName("overlay") as HTMLCollectionOf<HTMLElement>
 
-    if(this.comment != null || this.comment != "" || this.comment != " " || this.comment != undefined || this.comment.length > 0){
+    if (this.comment != null || this.comment != "" || this.comment != " " || this.comment != undefined || this.comment.length > 0) {
       // enabler[0].style.display="none"
-      enabler[0].style.display="none"
+      enabler[0].style.display = "none"
 
     }
     // else if(this.comment == null || this.comment == "" || this.comment == " " || this.comment == undefined || this.comment.length < 1){
     //   enabler[0].style.display="block";
     //   console.log("empty");
-      
+
     // }
-    if(this.comment.length == 0){
-      enabler[0].style.display="block";
+    if (this.comment.length == 0) {
+      enabler[0].style.display = "block";
       console.log("empty");
-      
+
     }
 
-    
+
   }
   scroll(event) {
     let page = document.getElementsByClassName('content') as HTMLCollectionOf<HTMLElement>;
@@ -215,82 +221,77 @@ export class ViewPage implements OnInit {
 
 
   BuyArt(pic, name, key, url, comments, email, username, description, location, price, likes, name1, uid, currentUserId) {
-    this.verified = this.art.verify();
-    if (this.verified == 0) {
-      let alert = this.alertCtrl.create({
-        title: 'Email not verified',
-        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
-        cssClass: "myAlert",
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel');
-            }
-          },
-          {
-            text: 'Resend',
-            handler: () => {
-              this.art.sendVerificationLink();  
-            }
+    this.art.checkstate().then((data: any) => {
+      if (data == 1) {
+        this.verified = this.art.verify();
+        this.art.checkOrderState(uid, this.keys2).then((data: any) => {
+          if (data == 1) {
+            let alert = this.alertCtrl.create({
+              // title: 'Email Verification',
+              message: 'You cannot order the same artwork more than once.',
+              cssClass: "myAlert",
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  handler: () => {
+                    console.log('Cancel');
+                  }
+                },
+              ]
+            });
+            alert.present()
           }
-        ]
-      });
-      alert.present();
-
-    }
-    else {
-      this.art.checkOrderState(uid, this.keys2).then((data: any) => {
-        if (data == 1) {
-          let alert = this.alertCtrl.create({
-            // title: 'Email Verification',
-            message: 'You cannot order the same artwork more than once.',
-            cssClass: "myAlert",
-            buttons: [
-              {
-                text: 'Cancel',
-                role: 'cancel',
-                handler: () => {
-                  console.log('Cancel');
-                }
-              },
-              {
-                text: 'Send',
-                handler: () => {
-                  this.art.checkVerificatiom();
-                }
+          else {
+            this.art.getUserEmail().then(data => {
+              this.SendEmailProvider.sendEmail(data, this.email, this.downloadurl, price);
+              let obj = {
+                name: name,
+                pic: pic,
+                key: this.keys2,
+                url: url,
+                comments: this.numComments,
+                email: email,
+                username: username,
+                description: description,
+                location: location,
+                price: price,
+                likes: this.numlikes,
+                name1: name1,
+                uid: uid,
+                currentUserId: currentUserId
               }
-            ]
-          });
-          alert.present();
+              this.sendInformation();
+              this.navCtrl.push(OrderModalPage, { obj: obj });
+            })
+          }
+        })
 
-        }
-        else {
-          this.art.getUserEmail().then(data => {
-            this.SendEmailProvider.sendEmail(data, this.email, this.downloadurl, price);
-            let obj = {
-              name: name,
-              pic: pic,
-              key: this.keys2,
-              url: url,
-              comments: this.numComments,
-              email: email,
-              username: username,
-              description: description,
-              location: location,
-              price: price,
-              likes: this.numlikes,
-              name1: name1,
-              uid: uid,
-              currentUserId: currentUserId
+      } else {
+        let alert = this.alertCtrl.create({
+          // title: 'Email not verified',
+          message: "You have to sign in before you can place an order. Would you like to sign in now?",
+          cssClass: "myAlert",
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel');
+              }
+            },
+            {
+              text: 'Sign in',
+              handler: () => {
+                this.navCtrl.push(LoginPage)
+              }
             }
-            this.sendInformation();
-            this.navCtrl.push(OrderModalPage, { obj: obj });
-          })
-        }
-      })
-    }
+          ]
+        });
+        alert.present();
+      }
+    })
+
   }
 
   GoBackToCategory() {
@@ -324,100 +325,151 @@ export class ViewPage implements OnInit {
 
   }
   likePicture() {
-    this.verified = this.art.verify();
-    if (this.verified == 0) {
-      let alert = this.alertCtrl.create({
-        title: 'Email not verified',
-        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
-        cssClass: "myAlert",
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel');
-            }
-          },
-          {
-            text: 'Resend',
-            handler: () => {
-              this.art.sendVerificationLink();
-            }
-          }
-        ]
-      });
-      alert.present();
+    this.art.checkstate().then((data: any) => {
+      if (data == 1) {
+        this.verified = this.art.verify();
+        if (this.verified == 0) {
+          let alert = this.alertCtrl.create({
+            title: 'Email not verified',
+            message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+            cssClass: "myAlert",
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel');
+                }
+              },
+              {
+                text: 'Resend',
+                handler: () => {
+                  this.art.sendVerificationLink();
+                }
+              }
+            ]
+          });
+          alert.present();
 
-    }
-    else {
-      console.log(this.clr);
-
-      this.art.viewLikes(this.obj.key).then(data => {
-        if (data == "not found") {
-          this.art.likePic(this.obj.key);
-          this.art.addNumOfLikes(this.obj.key, this.numlikes);
-          this.numlikes++;
-          this.clr = "primary"
         }
         else {
-          this.art.removeLike(this.obj.key, this.numlikes, data);
-          this.numlikes--;
-          this.clr = "light"
+          console.log(this.clr);
+
+          this.art.viewLikes(this.obj.key).then(data => {
+            if (data == "not found") {
+              this.art.likePic(this.obj.key);
+              this.art.addNumOfLikes(this.obj.key, this.numlikes);
+              this.numlikes++;
+              this.clr = "primary"
+            }
+            else {
+              this.art.removeLike(this.obj.key, this.numlikes, data);
+              this.numlikes--;
+              this.clr = "light"
+            }
+          })
+          console.log(this.clr);
+
         }
-      })
-      console.log(this.clr);
-
-    }
-
-  }
-  verified;
-  CommentPic(key) {
-    this.verified = this.art.verify();
-    if (this.verified == 0) {
+      } else {
         let alert = this.alertCtrl.create({
-        title: 'Email not verified',
-        message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
-        cssClass: "myAlert",
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            handler: () => {
-              console.log('Cancel');
+          // title: 'Email not verified',
+          message: "You have to sign in before you can like a picture. Would you like to sign in now?",
+          cssClass: "myAlert",
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel');
+              }
+            },
+            {
+              text: 'Sign in',
+              handler: () => {
+                this.navCtrl.push(LoginPage)
+              }
             }
-          },
-          {
-            text: 'Resend',
-            handler: () => {
-              this.art.sendVerificationLink();
-            }
-          }
-        ]
-      });
-      alert.present();
-    }
-    else {
-      if (this.comment == "" || this.comment == null) {
-        const alert = this.alertCtrl.create({
-          // title: "Oops!",
-          subTitle: "It looks like you didn't write anything on the comments, please check verify your input.",
-          buttons: ['OK']
+          ]
         });
         alert.present();
       }
-      else {
-        this.art.comments(this.obj.key, this.comment).then((data: any) => {
-          this.art.addNumOfComments(this.obj.key, this.numComments).then(data => {
-            this.art.viewComments(this.obj.key, this.viewComments).then(data => {
-              this.arr2.length = 0;
-              this.Retrivecomments();
+    })
+  }
+  verified;
+  CommentPic(key) {
+    this.art.checkstate().then((data: any) => {
+      if (data == 1) {
+        this.verified = this.art.verify();
+        if (this.verified == 0) {
+          let alert = this.alertCtrl.create({
+            title: 'Email not verified',
+            message: "Your email hasn't been verified yet, please check your mail or click 'Resend' to get a new verification link.",
+            cssClass: "myAlert",
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel');
+                }
+              },
+              {
+                text: 'Resend',
+                handler: () => {
+                  this.art.sendVerificationLink();
+                }
+              }
+            ]
+          });
+          alert.present();
+        }
+        else {
+          if (this.comment == "" || this.comment == null) {
+            const alert = this.alertCtrl.create({
+              // title: "Oops!",
+              subTitle: "It looks like you didn't write anything on the comments, please check verify your input.",
+              buttons: ['OK']
+            });
+            alert.present();
+          }
+          else {
+            this.art.comments(this.obj.key, this.comment).then((data: any) => {
+              this.art.addNumOfComments(this.obj.key, this.numComments).then(data => {
+                this.art.viewComments(this.obj.key, this.viewComments).then(data => {
+                  this.arr2.length = 0;
+                  this.Retrivecomments();
+                })
+              })
+              this.numComments++;
             })
-          })
-          this.numComments++;
-        })
-        this.comment = "";
+            this.comment = "";
+          }
+        }
+      } else {
+        let alert = this.alertCtrl.create({
+          // title: 'Email not verified',
+          message: "You have to sign in before you can comment. Would you like to sign in now?",
+          cssClass: "myAlert",
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel');
+              }
+            },
+            {
+              text: 'Sign in',
+              handler: () => {
+                this.navCtrl.push(LoginPage)
+              }
+            }
+          ]
+        });
+        alert.present();
       }
-    }
+    })
   }
 
 }
