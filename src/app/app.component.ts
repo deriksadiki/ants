@@ -16,6 +16,7 @@ import { viewParentEl } from '@angular/core/src/view/util';
 import { UploadImagePage } from '../pages/upload-image/upload-image';
 
 import { ScreenOrientation } from '@ionic-native/screen-orientation'
+import { timer } from 'rxjs/observable/timer'
 
 
 @Component({
@@ -28,6 +29,7 @@ export class MyApp {
 
   pages: Array<{ title: string, component: any }>;
 
+  showSplash = true;
   constructor(public screenOrientation: ScreenOrientation, public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public art: StreetartzProvider) {
     art.checkstate().then((data: any) => {
       if (data == 1) {
@@ -54,6 +56,8 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
+
+      timer(3000).subscribe(()=> this.showSplash = false)
     });
   }
 
